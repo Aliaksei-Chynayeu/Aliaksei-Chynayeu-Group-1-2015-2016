@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://www.example.org/ingredient" 
+    xmlns:tns="http://www.example.org/ingredient">
+    <element name="ingredients">
+        <complexType>
+            <sequence>
+                <element name="ingredient" type="tns:Ingredient" minOccurs="1" maxOccurs="unbounded" />
+            </sequence>
+        </complexType>
+    </element>
+
+    <complexType name="Ingredient">
+        <sequence>
+            <element name="name" type="string" />
+            <element name="measure" type="tns:MeasureUnit" />
+            <element name="quantity" type="integer" />
+        </sequence>
+        <attribute name="id" type="integer" use="required" />
+    </complexType>
+    
+    <simpleType name="MeasureUnit">
+        <restriction base="string">
+            <enumeration value="GRAMM" />
+            <enumeration value="PIECE" />
+            <enumeration value="ML" />
+        </restriction>
+    </simpleType>
+
+</schema>
