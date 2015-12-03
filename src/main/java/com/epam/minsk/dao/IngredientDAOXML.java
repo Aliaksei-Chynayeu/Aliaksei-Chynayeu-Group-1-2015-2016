@@ -11,7 +11,11 @@ import com.epam.minsk.bean.ComponentEntity;
 import com.epam.minsk.dao.IComponentEntityDAO;
 import com.epam.minsk.xml.analyzer.IngredientAnalyzerSAX;
 
+/** Contains implementation for Ingredient DAO */
 public class IngredientDAOXML  implements IComponentEntityDAO {
+	
+	/** path to XML file where data are saved */
+	private static final String PATH_TO_FILE = "ingredient.xml";
 
 	@Override
 	public List<ComponentEntity> findAll() {
@@ -21,7 +25,7 @@ public class IngredientDAOXML  implements IComponentEntityDAO {
 			readerIngredient = org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
 			IngredientAnalyzerSAX ingredientSax = new IngredientAnalyzerSAX();
 			readerIngredient.setContentHandler(ingredientSax);
-			readerIngredient.parse("ingredient.xml");
+			readerIngredient.parse(PATH_TO_FILE);
 			ingredientList = ingredientSax.getIngredientList();
 		} catch (SAXException e) {
 			

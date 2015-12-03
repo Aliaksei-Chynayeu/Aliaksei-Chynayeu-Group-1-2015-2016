@@ -1,9 +1,14 @@
 package com.epam.minsk.bean;
 
-public class Ingredient extends ComponentEntity implements IProductComponent {
+/**
+ * @author Dzina_Andreyeva
+ * An entity which describes Ingredient for Recipe
+ */
+public class Ingredient extends ComponentEntity implements IComponentProduct {
 
-	
+	/** Measure of unit for ingredient. Ex: GRAMM, ML, etc. */
 	private MeasureUnit measureUnit;
+	/** The quantity of ingredient for current moment */
 	private double quantity;
 	
 	public Ingredient(Long id) {
@@ -25,7 +30,4 @@ public class Ingredient extends ComponentEntity implements IProductComponent {
 	public void setQuantity(double quantity) {
 		this.quantity = quantity;
 	}
-
-	
-	
 }

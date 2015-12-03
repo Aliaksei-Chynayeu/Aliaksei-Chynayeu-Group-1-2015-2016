@@ -1,16 +1,17 @@
 package com.epam.minsk.bean;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/** A Basic class for describing entities */
 public abstract class ComponentEntity {
 	
+	/** id for component */
 	private Long id;
+	/** name of component */
 	private String name;
+	/** additional information about component */
 	private String comment;
+	/** how popular or necessary component from 0 (unpopular/unnecessary) to 5 (very popular/necessary) */
 	private int rating;
-	private List<Category> categoryList = new ArrayList<Category>();
-
+	
 	public ComponentEntity(Long id) {
 		this.id = id;
 	}
@@ -43,11 +44,5 @@ public abstract class ComponentEntity {
 		this.rating = rating;
 	}
 	
-	public List<Category> getCategoryList() {
-		return categoryList;
-	}
-
-	public void setCategoryList(List<Category> categoryList) {
-		this.categoryList = categoryList;
-	}
+	
 }

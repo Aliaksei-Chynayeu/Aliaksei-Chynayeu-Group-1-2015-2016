@@ -13,7 +13,8 @@ import com.epam.minsk.xml.analyzer.RecipeAnalyzerSAX;
 public class RecipeDAOXML implements IComponentEntityDAO {
 	
 	List<IComponentEntityDAO> recipeList = new ArrayList<IComponentEntityDAO>();
-	
+	/** path to XML file where data are saved */
+	private static final String PATH_TO_FILE = "recipe.xml";
 	
 	@Override
 	public List<ComponentEntity> findAll() {
@@ -23,7 +24,7 @@ public class RecipeDAOXML implements IComponentEntityDAO {
 			readerRecipe = org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
 			RecipeAnalyzerSAX recipeSax = new RecipeAnalyzerSAX();
 			readerRecipe.setContentHandler(recipeSax);
-			readerRecipe.parse("recipe.xml");
+			readerRecipe.parse(PATH_TO_FILE);
 			recipeList = recipeSax.getRecipeList();
 		} catch (SAXException e) {
 			

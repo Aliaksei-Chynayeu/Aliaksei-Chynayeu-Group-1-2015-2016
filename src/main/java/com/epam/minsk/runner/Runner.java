@@ -12,7 +12,6 @@ public class Runner {
 
 	public static void main(String[] args) {
 		try {
-			// создание SAX-анализатора
 			XMLReader readerRecipe = org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
 			XMLReader readerComponent = org.xml.sax.helpers.XMLReaderFactory.createXMLReader();
 			RecipeAnalyzerSAX recipeSax = new RecipeAnalyzerSAX();
