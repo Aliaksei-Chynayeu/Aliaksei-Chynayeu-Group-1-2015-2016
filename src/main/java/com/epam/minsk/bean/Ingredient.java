@@ -1,9 +1,15 @@
 package com.epam.minsk.bean;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author Dzina_Andreyeva
  * An entity which describes Ingredient for Recipe
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Ingredient extends ComponentEntity implements IComponentProduct {
 
 	/** Measure of unit for ingredient. Ex: GRAMM, ML, etc. */
@@ -11,10 +17,7 @@ public class Ingredient extends ComponentEntity implements IComponentProduct {
 	/** The quantity of ingredient for current moment */
 	private double quantity;
 	
-	public Ingredient(Long id) {
-		super(id);
-	}
-	
+
 	public MeasureUnit getMesureUnit() {
 		return measureUnit;
 	}

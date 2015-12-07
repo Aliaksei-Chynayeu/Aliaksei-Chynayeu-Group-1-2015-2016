@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ingredients>
+	<ingredient id="1">
+    	<name>flour</name>
+    	<measure>GRAMM</measure>
+    	<quantity>1000</quantity>
+	</ingredient>
+	<ingredient id="2">
+    	<name>yeast</name>
+    	<measure>GRAMM</measure>
+    	<quantity>200</quantity>
+	</ingredient>
+</ingredients>

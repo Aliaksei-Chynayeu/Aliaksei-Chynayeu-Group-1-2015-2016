@@ -1,9 +1,17 @@
 package com.epam.minsk.bean;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /** A Basic class for describing entities */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class ComponentEntity {
 	
 	/** id for component */
+	@XmlAttribute
 	private Long id;
 	/** name of component */
 	private String name;
@@ -12,12 +20,12 @@ public abstract class ComponentEntity {
 	/** how popular or necessary component from 0 (unpopular/unnecessary) to 5 (very popular/necessary) */
 	private int rating;
 	
-	public ComponentEntity(Long id) {
-		this.id = id;
-	}
-	
 	public Long getId() {
 		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public String getName() {
