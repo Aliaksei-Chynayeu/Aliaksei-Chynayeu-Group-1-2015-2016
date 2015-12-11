@@ -30,7 +30,7 @@ public class RecipeDAOXML implements IRecipeDAO {
 			JAXBContext jaxbContext = JAXBContext.newInstance(Recipe.class, Ingredient.class, WrapperXML.class);
 			jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			} catch (JAXBException e) {
-				LOG.error("JAXBException");
+				LOG.error("JAXBException" + e);
 			}		
 	}
 	
@@ -39,7 +39,7 @@ public class RecipeDAOXML implements IRecipeDAO {
 		try {
 			recipeList = MarshalUtil.unmarshal(jaxbUnmarshaller, Recipe.class, PATH_TO_FILE);
 		} catch (JAXBException e) {
-			LOG.error("JAXBException");
+			LOG.error("JAXBException" + e);
 		}
 		return recipeList;
 	}
@@ -69,7 +69,7 @@ public class RecipeDAOXML implements IRecipeDAO {
 				}
 			}
 		} catch (JAXBException e) {
-			LOG.error("JAXBException");
+			LOG.error("JAXBException" + e);
 		}
 		return null;
 	}
@@ -85,7 +85,7 @@ public class RecipeDAOXML implements IRecipeDAO {
 				}
 			}
 		} catch (JAXBException e) {
-			LOG.error("JAXBException");
+			LOG.error("JAXBException" + e);
 		}
 		return list;
 	}

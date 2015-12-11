@@ -31,7 +31,7 @@ public class IngredientDAOXML  implements IComponentProductDAO {
 			JAXBContext jaxbContext = JAXBContext.newInstance(Ingredient.class, WrapperXML.class);
 			jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			} catch (JAXBException e) {
-				LOG.error("JAXBException");
+				LOG.error("JAXBException" + e);
 			}		
 	}
 
@@ -40,7 +40,7 @@ public class IngredientDAOXML  implements IComponentProductDAO {
 		try {
 			ingredientList = MarshalUtil.unmarshal(jaxbUnmarshaller, IComponentProduct.class, PATH_TO_FILE);
 		} catch (JAXBException e) {
-			LOG.error("JAXBException");
+			LOG.error("JAXBException" + e);
 		}
 		return ingredientList;
 	}
@@ -70,7 +70,7 @@ public class IngredientDAOXML  implements IComponentProductDAO {
 				}
 			}
 		} catch (JAXBException e) {
-			LOG.error("JAXBException");
+			LOG.error("JAXBException" + e);
 		}
 		return null;
 	}
@@ -86,7 +86,7 @@ public class IngredientDAOXML  implements IComponentProductDAO {
 				}
 			}
 		} catch (JAXBException e) {
-			LOG.error("JAXBException");
+			LOG.error("JAXBException" + e);
 		}
 		return list;
 	}
