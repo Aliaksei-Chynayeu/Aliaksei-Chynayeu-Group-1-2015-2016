@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<recipes>
+<recipe id="1">
+    <name>Bread</name>
+    <ingredients>
+      <ingredient id="1">
+      	<name>flour</name>
+      	<quantity>300</quantity>
+      	<mesureunit>GRAMM</mesureunit>
+      </ingredient>
+      <ingredient id="2">
+      	<name>yeast</name>
+      	<quantity>300</quantity>
+      	<mesureunit>GRAMM</mesureunit>
+      </ingredient>
+    </ingredients>
+    <rating>1</rating>
+    <comment>comment</comment>
+ 	<description>description</description>
+ 	<categories>
+   <category>DINNER</category>
+   </categories>
+ </recipe>
+ <recipe id="2">
+    <name>Bread</name>
+    <ingredients>
+      <ingredient>
+      	<id>1</id>
+      	<name>flour</name>
+      	<quantity>300</quantity>
+      	<mesureunit>GRAMM</mesureunit>
+      </ingredient>
+      <ingredient>
+      	<id>2</id>
+      	<name>yeast</name>
+      	<quantity>300</quantity>
+      	<mesureunit>GRAMM</mesureunit>
+      </ingredient>
+    </ingredients>
+    <rating>1</rating>
+    <comment>comment</comment>
+ 	<description>description</description>
+ 	<categories>
+   <category>DINNER</category>
+   </categories>
+ </recipe>
+</recipes>
