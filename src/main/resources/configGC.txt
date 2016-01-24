@@ -1,0 +1,9 @@
+java -Xmx18m -Xms6m -Xmn2m -XX:PermSize=20m -XX:MaxPermSize=30m -XX:+UseSerialGC com.epam.minsk.runner.Runner
+
+java -Xmx12m -Xms3m -Xmn1m -XX:PermSize=20m -XX:MaxPermSize=20m -XX:+UseParallelGC com.epam.minsk.runner.Runner
+
+java -Xmx18m -Xms9m -Xmn3m -XX:PermSize=40m -XX:MaxPermSize=40m -XX:+UseParallelOldGC com.epam.minsk.runner.Runner
+
+java -Xmx18m -Xms6m -Xmn2m -XX:PermSize=20m -XX:MaxPermSize=30m -XX:+UseConcMarkSweepGC -XX:ParallelCMSThreads=2 com.epam.minsk.runner.Runner
+
+java -Xmx16m -Xms4m -Xmn2m -XX:PermSize=12m -XX:MaxPermSize=18m -XX:+UseG1GC com.epam.minsk.runner.Runner
