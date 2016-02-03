@@ -55,7 +55,7 @@ public class IngredientDAOXML  implements IComponentProductDAO {
 	}
 
 	@Override
-	public synchronized boolean add(IComponentProduct ingredient) {
+	public boolean add(IComponentProduct ingredient) {
 		List<IComponentProduct> list = findAll();
 		list.add(ingredient);
 		try {
@@ -68,7 +68,7 @@ public class IngredientDAOXML  implements IComponentProductDAO {
 	}
 
 	@Override
-	public synchronized boolean update(IComponentProduct component) {
+	public boolean update(IComponentProduct component) {
 		Ingredient ingredientNew = (Ingredient) component;
 		delete(ingredientNew.getId());
 		List<IComponentProduct> list = findAll();
@@ -82,7 +82,7 @@ public class IngredientDAOXML  implements IComponentProductDAO {
 	}
 
 	@Override
-	public synchronized boolean delete(Long id) {
+	public boolean delete(Long id) {
 		List<IComponentProduct> list = findAll();
 		for(Iterator<IComponentProduct> it = list.iterator(); it.hasNext(); ) {
 		IComponentProduct it1 = it.next();
