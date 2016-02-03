@@ -30,18 +30,18 @@ public class Recipe extends ComponentEntity {
 	/** List of components which need for preparing */
 	@XmlElementWrapper(name="ingredients")
 	@XmlElementRefs({@XmlElementRef(type=Ingredient.class, name="ingredient")})
-	private List<IComponentProduct> ingredients = new ArrayList<IComponentProduct>();
+	private List<IComponentProduct> componentList = new ArrayList<IComponentProduct>();
 		
 	public String getDescription() {
 		return description;
 	}
 	
-	public List<IComponentProduct> getIngredients() {
-		return ingredients;
+	public List<IComponentProduct> getComponents() {
+		return componentList;
 	}
 
-	public void setIngredients(List<IComponentProduct> ingredients) {
-		this.ingredients = ingredients;
+	public void setComponents(List<IComponentProduct> componentList) {
+		this.componentList = componentList;
 	}
 
 	public void setDescription(String description) {
