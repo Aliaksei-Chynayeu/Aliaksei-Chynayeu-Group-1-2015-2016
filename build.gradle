@@ -1,0 +1,58 @@
+apply plugin: 'java'
+apply plugin: 'findbugs'
+apply plugin: 'jacoco'
+apply plugin: 'application'
+apply plugin: 'checkstyle'
+		
+mainClassName = 'com.epam.minsk.runner.Runner.java'
+	
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile 'log4j:log4j:1.2.17' 
+	compile 'cglib:cglib-nodep:2.2.2'
+	compile 'org.springframework:spring-context:3.1.0.RELEASE'
+	compile 'org.springframework:spring-webmvc:3.1.0.RELEASE'
+	compile 'org.springframework:spring-orm:3.1.0.RELEASE'
+	compile 'javax.servlet:servlet-api:2.4'
+	compile 'junit:junit:4.11'
+}
+  	
+jar {
+	manifest {
+    	attributes 'Main-Class': 'com.epam.minsk.runner.Runner.java',
+            	'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
+    }
+}
+    
+test { 
+	reports { 
+  		junitXml.enabled = false 
+  		html.enabled = true 
+  		html.destination rootProject.file("reports/passRates") 
+ 	} 
+} 
+
+task appJacocoTestReport(type: JacocoReport, dependsOn: test) {
+	reports { 
+  		xml.enabled false 
+  		csv.enabled false 
+  		html.enabled true 
+  		html.destination "reports/jacoco/jacocoHtml" 
+ 	} 
+ 
+ 	classDirectories = fileTree(dir: './build/classes/main')
+ 	sourceDirectories = files('src/main/java')
+   	executionData = files("reports/jacoco/jacocoTest.exec")
+   	test { 
+   		jacoco { 
+    		destinationFile = file("reports/jacoco/jacocoTest.exec") 
+   		} 
+   	} 
+}
+
+task myJavadocs(type: Javadoc) {
+   	source = sourceSets.main.allJava
+}
