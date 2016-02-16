@@ -55,4 +55,13 @@ public class Recipe extends ComponentEntity {
 	public void setCategoryList(List<Category> categoryList) {
 		this.categoryList = categoryList;
 	}
+	
+	public List<String> getIngredientsId() {
+		List<String> idList = new ArrayList<String>();
+		for (IComponentProduct ingredient : ingredients) {
+			idList.add(((Ingredient)ingredient).getId());
+		}
+		return idList;
+	}
+	
 }

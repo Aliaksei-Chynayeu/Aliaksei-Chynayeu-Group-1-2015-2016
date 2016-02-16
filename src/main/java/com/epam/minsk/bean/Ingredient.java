@@ -15,7 +15,7 @@ public class Ingredient extends ComponentEntity implements IComponentProduct {
 	/** Measure of unit for ingredient. Ex: GRAMM, ML, etc. */
 	private MeasureUnit measureUnit;
 	/** The quantity of ingredient for current moment */
-	private double quantity;
+	private Double quantity;
 	
 
 	public MeasureUnit getMesureUnit() {
@@ -26,11 +26,11 @@ public class Ingredient extends ComponentEntity implements IComponentProduct {
 		this.measureUnit = measureUnit;
 	}
 
-	public double getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(double quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 }

@@ -1,19 +1,27 @@
 package com.epam.minsk.runner;
 
-import com.epam.minsk.dao.IComponentProductDAO;
-import com.epam.minsk.dao.IRecipeDAO;
-import com.epam.minsk.factory.FactoryDAO;
-import com.epam.minsk.factory.FactoryDAOXML;
-import com.epam.minsk.util.CookUtil;
-
+import java.sql.SQLException;
+import com.epam.minsk.connection.MongoConnection;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 
 public class Runner {
 
-	public static void main(String[] args) {
-		FactoryDAO factory = new FactoryDAOXML();
-		IRecipeDAO recipeDAO = factory.getRecipeDAO();
-		IComponentProductDAO ingredientDAO = factory.getIngedientDAO();
+	public static void main(String[] args) throws SQLException {
+		Generator.generateIngredientList();
+		Generator.generateRecipeList();
 		
-		System.out.println(CookUtil.toCook(recipeDAO.findById(1L), ingredientDAO.findAll()));
+		DBCollection collection = MongoConnection.getRecipeCollection();
+		DBCursor cursor = collection.find();
+		while (cursor.hasNext()) {
+			System.out.println(cursor.next());
+		}
+		
+		DBCollection collection2 = MongoConnection.getIngredientCollection();
+		DBCursor cursor2 = collection2.find();
+		while (cursor2.hasNext()) {
+			System.out.println(cursor2.next());
+		}
+		
 	}
 }

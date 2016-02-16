@@ -12,7 +12,7 @@ public abstract class ComponentEntity {
 	
 	/** id for component */
 	@XmlAttribute
-	private Long id;
+	private String id;
 	/** name of component */
 	private String name;
 	/** additional information about component */
@@ -20,11 +20,11 @@ public abstract class ComponentEntity {
 	/** how popular or necessary component from 0 (unpopular/unnecessary) to 5 (very popular/necessary) */
 	private int rating;
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	

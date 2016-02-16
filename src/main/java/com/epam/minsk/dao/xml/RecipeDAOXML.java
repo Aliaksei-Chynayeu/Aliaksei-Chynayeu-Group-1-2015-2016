@@ -45,26 +45,26 @@ public class RecipeDAOXML implements IRecipeDAO {
 	}
 
 	@Override
-	public boolean create() {
+	public boolean create(Recipe recipe) {
 		return false;
 	}
 
 	@Override
-	public boolean update() {
+	public boolean update(Recipe recipe) {
 		return false;
 	}
 
 	@Override
-	public boolean delete() {
+	public boolean deleteById(String id) {
 		return false;
 	}
 
 	@Override
-	public Recipe findById(Long id) {
+	public Recipe findById(String id) {
 		try {
 			recipeList = MarshalUtil.unmarshal(jaxbUnmarshaller, Recipe.class, PATH_TO_FILE);
 			for (Recipe recipeEntity : recipeList) {
-				if (recipeEntity.getId() == id) {
+				if (recipeEntity.getId().equals(id)) {
 					return recipeEntity;
 				}
 			}
@@ -75,19 +75,24 @@ public class RecipeDAOXML implements IRecipeDAO {
 	}
 
 	@Override
-	public List<Recipe> findByName(String name) {
-		List<Recipe> list = new ArrayList<Recipe>();
+	public Recipe findByName(String name) {
 		try {
 			recipeList = MarshalUtil.unmarshal(jaxbUnmarshaller, Recipe.class, PATH_TO_FILE);
 			for (Recipe recipe : recipeList) {
-				if (recipe.getName() == name) {
-					list.add(recipe);
+				if (recipe.getName().equals(name)) {
+					return recipe;
 				}
 			}
 		} catch (JAXBException e) {
 			LOG.error("JAXBException" + e);
 		}
-		return list;
+		return null;
+	}
+
+	@Override
+	public boolean deleteByName(String name) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

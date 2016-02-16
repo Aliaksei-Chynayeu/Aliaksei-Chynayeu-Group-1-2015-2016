@@ -46,26 +46,26 @@ public class IngredientDAOXML  implements IComponentProductDAO {
 	}
 
 	@Override
-	public boolean create() {
+	public boolean create(IComponentProduct ingredient) {
 		return false;
 	}
 
 	@Override
-	public boolean update() {
+	public boolean update(IComponentProduct ingredient) {
 		return false;
 	}
 
 	@Override
-	public boolean delete() {
+	public boolean deleteById(String id) {
 		return false;
 	}
 
 	@Override
-	public IComponentProduct findById(Long id) {
+	public IComponentProduct findById(String id) {
 		try {
 			ingredientList = MarshalUtil.unmarshal(jaxbUnmarshaller, IComponentProduct.class, PATH_TO_FILE);
 			for (IComponentProduct ingredientEntity : ingredientList) {
-				if (((ComponentEntity)ingredientEntity).getId() == id) {
+				if (((ComponentEntity)ingredientEntity).getId().equals(id)) {
 					return ingredientEntity;
 				}
 			}
@@ -76,19 +76,24 @@ public class IngredientDAOXML  implements IComponentProductDAO {
 	}
 
 	@Override
-	public List<IComponentProduct> findByName(String name) {
-		List<IComponentProduct> list = new ArrayList<IComponentProduct>();
+	public IComponentProduct findByName(String name) {
 		try {
 			ingredientList = MarshalUtil.unmarshal(jaxbUnmarshaller, IComponentProduct.class, PATH_TO_FILE);
 			for (IComponentProduct ingredientEntity : ingredientList) {
-				if (((ComponentEntity)ingredientEntity).getName() == name) {
-					list.add(ingredientEntity);
+				if (((ComponentEntity)ingredientEntity).getName().equals(name)) {
+					return ingredientEntity;
 				}
 			}
 		} catch (JAXBException e) {
 			LOG.error("JAXBException" + e);
 		}
-		return list;
+		return null;
+	}
+
+	@Override
+	public boolean deleteByName(String name) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

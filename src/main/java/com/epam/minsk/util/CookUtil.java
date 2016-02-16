@@ -10,7 +10,7 @@ import com.epam.minsk.bean.Recipe;
 public class CookUtil {
 	
 	public static boolean toCook(Recipe recipe, List<IComponentProduct> componentList) {
-		List<IComponentProduct> compNecessaryList = recipe.getComponents();
+		List<IComponentProduct> compNecessaryList = recipe.getIngredients();
 		boolean isEnough = true;
 		for (IComponentProduct compNes : compNecessaryList) {
 			IComponentProduct existComponent = getComponentIfExist(compNes, componentList);
