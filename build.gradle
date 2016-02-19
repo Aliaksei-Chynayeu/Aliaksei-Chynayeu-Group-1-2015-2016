@@ -1,0 +1,66 @@
+apply plugin: 'java'
+apply plugin: 'jacoco'
+ 
+ repositories {
+        mavenCentral()
+    }
+
+dependencies {
+   compile 'junit:junit:4.12'
+   compile project(':UI')
+   }
+
+subprojects {
+    apply plugin: "java"
+
+    repositories {
+        mavenCentral()
+    }
+    
+    jar {
+        from { 
+        	configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } 
+        	}
+        	
+     }
+    
+    task myJavadocs(type: Javadoc) {
+   	source = sourceSets.main.allJava
+	}
+}
+
+jar {
+        from { 
+        	configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } 
+        	}
+        	
+        manifest {
+         attributes 'Main-Class': 'com.epam.minsk.runner.Runner',
+             'Class-Path': configurations.runtime.files.collect { "lib/$it.name" }.join(' ')
+         }
+    }
+    
+   jacoco {
+    toolVersion = "0.7.1.201405082137"
+    reportsDir = file("$buildDir/jacoco")
+ }
+ 
+ jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${buildDir}/reports/jacocoHtml"
+    }
+    
+    }
+    
+    test {
+    jacoco {
+        append = false
+        destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
+        classDumpFile = file("$buildDir/jacoco/classpathdumps")
+     }
+       reports {
+          html.destination "${buildDir}/jacocoHtml"
+    }
+ }

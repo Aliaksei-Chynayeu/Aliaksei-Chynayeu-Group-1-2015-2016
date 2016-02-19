@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+    targetNamespace="http://www.example.org/recipe" 
+    xmlns:tns="http://www.example.org/recipe">
+    <element name="recipes">
+        <complexType>
+            <sequence>
+                <element name="recipe" type="tns:Recipe" minOccurs="1" maxOccurs="unbounded" />
+            </sequence>
+        </complexType>
+    </element>
+
+    <complexType name="Recipe">
+        <sequence>
+            <element name="name" type="string" />
+            <element name="ingredients" type="tns:Ingredients" />
+            <element name="rating" type="tns:Rating" />
+            <element name="comment" type="string" />
+            <element name="description" type="string" />
+            <element name="category" type="tns:RecipeCategory" />
+        </sequence>
+        <attribute name="id" type="integer" use="required" />
+    </complexType>
+    
+    <simpleType name="Rating">
+        <restriction base="integer">
+            <minExclusive value="0"/>
+            <maxExclusive value="5"/>
+        </restriction>
+    </simpleType>
+    
+    <complexType name="Ingredients">
+        <sequence>
+         	<element name="ingredient" type="integer" minOccurs="1" maxOccurs="unbounded" />   
+        </sequence>
+    </complexType>
+    
+    <simpleType name="RecipeCategory">
+        <restriction base="string">
+            <enumeration value="DINNER" />
+            <enumeration value="LUNCH" />
+            <enumeration value="BREAKFAST" />
+            <enumeration value="DRINK" />
+            <enumeration value="SWEETS" />
+            <enumeration value="BAKE" />
+        </restriction>
+    </simpleType>
+
+</schema>
