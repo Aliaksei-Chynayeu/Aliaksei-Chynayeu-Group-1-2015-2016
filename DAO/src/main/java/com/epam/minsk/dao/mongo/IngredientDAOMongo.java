@@ -2,7 +2,6 @@ package com.epam.minsk.dao.mongo;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bson.types.ObjectId;
 
 import com.epam.minsk.bean.IComponentProduct;
@@ -12,10 +11,12 @@ import com.epam.minsk.connection.MongoConnection;
 import com.epam.minsk.dao.IComponentProductDAO;
 import com.epam.minsk.exception.MongoDBException;
 import com.mongodb.BasicDBObject;
+import com.mongodb.BulkWriteOperation;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.WriteResult;
+import com.mongodb.BulkWriteResult;
 
 /** Contains implementation for Ingredient DAO */
 public class IngredientDAOMongo implements IComponentProductDAO {
@@ -41,12 +42,14 @@ public class IngredientDAOMongo implements IComponentProductDAO {
 	public boolean create(IComponentProduct ingredient) throws MongoDBException {
 		Ingredient newIngredient = (Ingredient) ingredient;
 		DBCollection ingredientCollection = MongoConnection.getIngredientCollection();
+		BulkWriteOperation bulk = ingredientCollection.initializeOrderedBulkOperation();
 		BasicDBObject query = new BasicDBObject();
 		query.put("name", newIngredient.getName());
 		query.put("measure", newIngredient.getMesureUnit().toString());
 		query.put("quantity", newIngredient.getQuantity().toString());
-		WriteResult rightResult = ingredientCollection.insert(query);
-		int n = rightResult.getN();
+		bulk.insert(query);
+		BulkWriteResult rightResult = bulk.execute();
+		int n = rightResult.getInsertedCount();
 		if (n == 1) {
 			return true;
 		} else {
@@ -58,14 +61,16 @@ public class IngredientDAOMongo implements IComponentProductDAO {
 	public synchronized boolean update(IComponentProduct ingredient) throws MongoDBException {
 		Ingredient updateIngredient = (Ingredient) ingredient;
 		DBCollection ingredientCollection = MongoConnection.getIngredientCollection();
+		BulkWriteOperation bulk = ingredientCollection.initializeOrderedBulkOperation();
 		BasicDBObject query = new BasicDBObject();
 		query.put("name", updateIngredient.getName());
 		query.put("measure", updateIngredient.getMesureUnit().toString());
 		query.put("quantity", updateIngredient.getQuantity().toString());
 		BasicDBObject updateQuery = new BasicDBObject();
 		updateQuery.put("name", updateIngredient.getName());
-		WriteResult rightResult = ingredientCollection.update(query, updateQuery);
-		int n = rightResult.getN();
+		bulk.find(updateQuery).upsert().updateOne(new BasicDBObject("$set", query));
+		BulkWriteResult rightResult = bulk.execute();
+		int n = rightResult.getMatchedCount();
 		if (n == 1) {
 			return true;
 		} else {
@@ -107,12 +112,16 @@ public class IngredientDAOMongo implements IComponentProductDAO {
 		DBCollection ingredientCollection = MongoConnection.getIngredientCollection();
 		BasicDBObject query = new BasicDBObject();
 		query.put("_id", new ObjectId(id));
-		DBObject ingredientObject = ingredientCollection.findOne(query);
-		ingredient.setId(((ObjectId)ingredientObject.get( "_id" )).toString());
-		ingredient.setName(ingredientObject.get("name").toString());
-		ingredient.setMesureUnit(MeasureUnit.valueOf(ingredientObject.get("measure").toString()));
-		ingredient.setQuantity(Double.valueOf(ingredientObject.get("quantity").toString()));
-		return ingredient;
+		DBCursor cursor = ingredientCollection.find(query);
+		if (cursor.hasNext()) {
+			DBObject ingredientObject = cursor.next();
+			ingredient.setId(((ObjectId)ingredientObject.get( "_id" )).toString());
+			ingredient.setName(ingredientObject.get("name").toString());
+			ingredient.setMesureUnit(MeasureUnit.valueOf(ingredientObject.get("measure").toString()));
+			ingredient.setQuantity(Double.valueOf(ingredientObject.get("quantity").toString()));
+			return ingredient;
+		}
+		else return null;
 	}
 
 	@Override
@@ -122,11 +131,14 @@ public class IngredientDAOMongo implements IComponentProductDAO {
 		BasicDBObject query = new BasicDBObject();
 		query.put("name", name);
 		DBCursor cursor = ingredientCollection.find(query);
-		DBObject ingredientObject = cursor.next();
-		ingredient.setId(((ObjectId)ingredientObject.get( "_id" )).toString());
-		ingredient.setName(ingredientObject.get("name").toString());
-		ingredient.setMesureUnit(MeasureUnit.valueOf(ingredientObject.get("measure").toString()));
-		ingredient.setQuantity(Double.valueOf(ingredientObject.get("quantity").toString()));
-		return ingredient;
+		if (cursor.hasNext()) {
+			DBObject ingredientObject = cursor.next();
+			ingredient.setId(((ObjectId)ingredientObject.get( "_id" )).toString());
+			ingredient.setName(ingredientObject.get("name").toString());
+			ingredient.setMesureUnit(MeasureUnit.valueOf(ingredientObject.get("measure").toString()));
+			ingredient.setQuantity(Double.valueOf(ingredientObject.get("quantity").toString()));
+			return ingredient;
+		}
+		else return null;
 	}
 }

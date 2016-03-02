@@ -27,5 +27,14 @@ public class Runner {
 			System.out.println(cursor2.next());
 		} */
 		
+		
+		DBCollection collection1 = MongoConnection.getIngredientCollection();
+		DBCursor cursor1 = collection1.find();
+	
+		
+		for (int i = 0; i < 10; i++) {
+			System.out.println(cursor1.next());
+		}
+		
 	}
 }

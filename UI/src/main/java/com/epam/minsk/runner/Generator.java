@@ -26,15 +26,15 @@ public class Generator {
 	/** Log4j */
 	private static final Logger LOG = Logger.getLogger(Generator.class);
 	
-	public static void generateIngredientList() {
+	public static void generateIngredientList(int ingredientNubmer) {
 		IComponentProductDAO ingredientDAO = factory.getIngedientDAO();
 		MeasureUnit mesures[] = {MeasureUnit.GRAMM, MeasureUnit.ML, MeasureUnit.PIECE};
 		Random random = new Random();
-		for (int i = 0; i < 70000; i++) {
+		for (int i = 0; i < ingredientNubmer; i++) {
 			Ingredient ingredient = new Ingredient();
 			ingredient.setName("name" + i);
 			ingredient.setMesureUnit(mesures[random.nextInt(mesures.length)]);
-			ingredient.setQuantity(Double.valueOf(random.nextInt(i +1)+ 100));
+			ingredient.setQuantity(Double.valueOf(random.nextInt(i + 1) + 100));
 			try {
 				ingredientDAO.create(ingredient);
 			} catch (MongoDBException e) {
@@ -43,9 +43,9 @@ public class Generator {
 		}
 	}
 	
-	public static void generateRecipeList() {
+	public static void generateRecipeList(int recipeNumber) {
 		IRecipeDAO recipeDAO = factory.getRecipeDAO();
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < recipeNumber; i++) {
 			Recipe recipe = new Recipe();
 			recipe.setName("name" + i);
 			recipe.setIngredients(generateIngredientsForRecipe());

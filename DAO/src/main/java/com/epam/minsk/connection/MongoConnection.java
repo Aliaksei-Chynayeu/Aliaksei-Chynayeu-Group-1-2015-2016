@@ -16,7 +16,7 @@ public class MongoConnection {
 	static {
 		if (mongo == null) {
 			mongo = new MongoClient("localhost", 27017);
-			mongo.setWriteConcern(WriteConcern.SAFE);
+			mongo.setWriteConcern(WriteConcern.ACKNOWLEDGED);
 		}
 		mongoDB = mongo.getDB(DB_NAME);
 	}

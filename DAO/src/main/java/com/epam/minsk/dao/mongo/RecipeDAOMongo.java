@@ -15,6 +15,8 @@ import com.epam.minsk.dao.IRecipeDAO;
 import com.epam.minsk.exception.MongoDBException;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
+import com.mongodb.BulkWriteOperation;
+import com.mongodb.BulkWriteResult;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
@@ -41,9 +43,11 @@ public class RecipeDAOMongo implements IRecipeDAO {
 	@Override
 	public boolean create(Recipe recipe) throws MongoDBException {
 		DBCollection recipeCollection = MongoConnection.getRecipeCollection();
+		BulkWriteOperation bulk = recipeCollection.initializeOrderedBulkOperation();
 		BasicDBObject query = createQueryForRecipe(recipe);
-		WriteResult rightResult = recipeCollection.insert(query);
-		int n = rightResult.getN();
+		bulk.insert(query);
+		BulkWriteResult rightResult = bulk.execute();
+		int n = rightResult.getInsertedCount();
 		if (n == 1) {
 			return true;
 		} else {
@@ -55,11 +59,13 @@ public class RecipeDAOMongo implements IRecipeDAO {
 	@Override
 	public synchronized boolean update(Recipe recipe) throws MongoDBException {
 		DBCollection recipeCollection = MongoConnection.getRecipeCollection();
+		BulkWriteOperation bulk = recipeCollection.initializeOrderedBulkOperation();
 		BasicDBObject query = createQueryForRecipe(recipe);
 		BasicDBObject updateQuery = new BasicDBObject();
 		updateQuery.put("name", recipe.getName());
-		WriteResult rightResult = recipeCollection.update(query, updateQuery);
-		int n = rightResult.getN();
+		bulk.find(updateQuery).upsert().updateOne(new BasicDBObject("$set", query));
+		BulkWriteResult rightResult = bulk.execute();
+		int n = rightResult.getMatchedCount();
 		if (n == 1) {
 			return true;
 		} else {
@@ -101,11 +107,15 @@ public class RecipeDAOMongo implements IRecipeDAO {
 		DBCollection recipeCollection = MongoConnection.getRecipeCollection();
 		BasicDBObject query = new BasicDBObject();
 		query.put("_id", new ObjectId(id));
-		DBObject recipeObject = recipeCollection.findOne(query);
-		recipe.setId(((ObjectId)recipeObject.get( "_id" )).toString());
-		recipe.setName(recipeObject.get("name").toString());
-		recipe.setIngredients(getIngredientListById(id));
-		return recipe;
+		DBCursor cursor = recipeCollection.find(query);
+		if (cursor.hasNext()) {
+			DBObject recipeObject = cursor.next();
+			recipe.setId(((ObjectId)recipeObject.get( "_id" )).toString());
+			recipe.setName(recipeObject.get("name").toString());
+			recipe.setIngredients(getIngredientListById(id));
+			return recipe;
+		}
+		else return null;
 	}
 
 	@Override
@@ -114,10 +124,14 @@ public class RecipeDAOMongo implements IRecipeDAO {
 		DBCollection recipeCollection = MongoConnection.getRecipeCollection();
 		BasicDBObject query = new BasicDBObject();
 		query.put("name", name);
-		DBObject ingredientObject = recipeCollection.findOne(query);
-		recipe.setId(((ObjectId)ingredientObject.get( "_id" )).toString());
-		recipe.setName(ingredientObject.get("name").toString());
-		return recipe;
+		DBCursor cursor = recipeCollection.find(query);
+		if (cursor.hasNext()) {
+			DBObject recipeObject = cursor.next();
+			recipe.setId(((ObjectId)recipeObject.get( "_id" )).toString());
+			recipe.setName(recipeObject.get("name").toString());
+			return recipe;
+		}
+		else return null;
 	}
 	
 	private List<IComponentProduct> getIngredientListById(String id) {
