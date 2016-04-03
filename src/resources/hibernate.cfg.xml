@@ -1,13 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?> 
-<!DOCTYPE hibernate-configuration SYSTEM "classpath://org/hibernate/hibernate-configuration-3.0.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+   <!DOCTYPE hibernate-configuration PUBLIC
+      "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+      "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration> 
     <session-factory> 
-        <property name="hibernate.connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property> 
-        <property name="hibernate.connection.url">jdbc:derby:d:\mine\db\RecipeChooserDB</property> 
-        <property name="hibernate.connection.password">admin</property> 
-        <property name="hibernate.connection.username">admin</property> 
+        
+        <!-- Dialect -->
         <property name="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</property> 
+        <!-- Show console sql statements -->
         <property name="show_sql">true</property>
+        <!-- Caching -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        <property name="hibernate.cache.use_second_level_cache">false</property>
+		<property name="hibernate.cache.use_query_cache">false</property>
+         <!-- Update ddl schema -->
         <property name="hibernate.hbm2ddl.auto">update</property> 
         
     </session-factory> 

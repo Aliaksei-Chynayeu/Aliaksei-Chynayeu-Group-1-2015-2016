@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<!-- Enable Annotation based Declarative Transaction Management -->
+	<tx:annotation-driven proxy-target-class="true"
+		transaction-manager="transactionManager" />
+		
+	<!-- Enable Annotation based configuration -->
+	<context:annotation-config />
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver" />
+		<property name="url" value="jdbc:derby:d:\mine\db\RecipeChooserDB" />
+		<property name="username" value="admin" />
+		<property name="password" value="admin" />
+	</bean>
+	
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    	<property name="dataSource" ref="dataSource" />
+    	<property name="configLocation" value="hibernate.cfg.xml" />
+    	<property name="annotatedClasses">
+       		<list>
+           		<value>com.epam.minsk.bean.ComponentEntity</value>
+           		<value>com.epam.minsk.bean.Ingredient</value>
+           		<value>com.epam.minsk.bean.Recipe</value>
+       		</list>
+    </property>
+	</bean>
+	
+	<bean id="ingredient" class="com.epam.minsk.bean.Ingredient" scope="prototype" />
+	<bean id="recipe" class="com.epam.minsk.bean.Recipe" scope="prototype" />
+	<bean id="component" abstract="true" class="com.epam.minsk.bean.ComponentEntity" />
+	
+	<bean id="ingredientDAO" class="com.epam.misnk.dao.hibernate.IngredientDAOHibernate" scope="prototype" />
+	<bean id="recipeDAO" class="com.epam.misnk.dao.hibernate.RecipeDAOHibernate" scope="prototype" />
+</beans>

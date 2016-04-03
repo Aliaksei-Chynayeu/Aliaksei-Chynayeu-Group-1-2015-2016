@@ -3,20 +3,25 @@ package com.epam.minsk.runner;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.epam.minsk.bean.Ingredient;
 import com.epam.minsk.bean.MeasureUnit;
 import com.epam.minsk.exception.DAOException;
-import com.epam.minsk.utils.HibernateUtil;
-import com.epam.misnk.dao.IIngredientDAO;
 import com.epam.misnk.dao.hibernate.IngredientDAOHibernate; 
 
 public class Runner {
 	private static final Logger LOG = Logger.getLogger(Runner.class);
+	private static ClassPathXmlApplicationContext ctx;
+	
+	static {
+		ctx = new ClassPathXmlApplicationContext("spring.xml");
+	}
 
 	public static void main(String[] args) {
-		IIngredientDAO ingDAO = new IngredientDAOHibernate();
-		Ingredient newIng = new Ingredient();
+		
+		IngredientDAOHibernate ingDAO = ctx.getBean(IngredientDAOHibernate.class);
+		Ingredient newIng = ctx.getBean(Ingredient.class);
 		newIng.setName("Butter");
 		newIng.setComment("Bitter butter is better than biter");
 		newIng.setRating(4);
@@ -68,8 +73,9 @@ public class Runner {
 			ingDAO.update(ing);
 		} catch (DAOException e) {
 			e.printStackTrace();
+		} finally {
+			ctx.close();
 		}
-	    HibernateUtil.closeFactory(); 
 	}
 	
 	private static void printIngredient(Ingredient ingrid) {

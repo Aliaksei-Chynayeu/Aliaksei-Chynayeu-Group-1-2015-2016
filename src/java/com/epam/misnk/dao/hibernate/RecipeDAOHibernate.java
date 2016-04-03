@@ -11,19 +11,17 @@ import org.hibernate.Transaction;
 import com.epam.minsk.bean.Ingredient;
 import com.epam.minsk.bean.Recipe;
 import com.epam.minsk.exception.DAOException;
-import com.epam.minsk.utils.HibernateUtil;
-import com.epam.misnk.dao.IRecipeDAO;
+import com.epam.misnk.dao.AbstractDAO;
 
-public class RecipeDAOHibernate implements IRecipeDAO {
+public class RecipeDAOHibernate extends AbstractDAO<Recipe> {
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Recipe> findAll() throws DAOException {
 		List<Recipe> recipes = new ArrayList<Recipe>();
-		Session session = null;
 
 		try {
-			session = HibernateUtil.openSession();
+			Session session = getSession();
 			Criteria cr = session.createCriteria(Recipe.class);
 			if (cr.list() != null) {
 				recipes.addAll(cr.list());
@@ -31,7 +29,7 @@ public class RecipeDAOHibernate implements IRecipeDAO {
 		} catch (HibernateException ex) {
 			throw new DAOException("Database error", ex);
 		} finally {
-			closeSession(session);
+			closeSession();
 		}
 		return recipes;
 	}
@@ -39,15 +37,14 @@ public class RecipeDAOHibernate implements IRecipeDAO {
 	@Override
 	public Recipe findById(int id) throws DAOException {
 		Recipe recipe;
-		Session session = null;
 
 		try {
-			session = HibernateUtil.openSession();
+			Session session = getSession();
 			recipe = session.get(Recipe.class, id);
 		} catch (HibernateException ex) {
 			throw new DAOException("Database error", ex);
 		} finally {
-			closeSession(session);
+			closeSession();
 		}
 		return recipe;
 	}
@@ -55,7 +52,6 @@ public class RecipeDAOHibernate implements IRecipeDAO {
 	@Override
 	public boolean create(Recipe recipe) throws DAOException {
 		boolean isCreated = false;
-		Session session = null;
 		Transaction tx = null;
 
 		if (recipe == null) {
@@ -63,7 +59,7 @@ public class RecipeDAOHibernate implements IRecipeDAO {
 		}
 
 		try {
-			session = HibernateUtil.openSession();
+			Session session = getSession();
 			tx = session.beginTransaction();
 			session.save(recipe);
 			tx.commit();
@@ -74,7 +70,7 @@ public class RecipeDAOHibernate implements IRecipeDAO {
 			}
 			throw new DAOException("Database error", ex);
 		} finally {
-			closeSession(session);
+			closeSession();
 		}
 		return isCreated;
 	}
@@ -82,7 +78,6 @@ public class RecipeDAOHibernate implements IRecipeDAO {
 	@Override
 	public boolean update(Recipe recipe) throws DAOException {
 		boolean isUpdated = false;
-		Session session = null;
 		Transaction tx = null;
 
 		if (recipe == null) {
@@ -90,7 +85,7 @@ public class RecipeDAOHibernate implements IRecipeDAO {
 		}
 
 		try {
-			session = HibernateUtil.openSession();
+			Session session = getSession();
 			tx = session.beginTransaction();
 			Recipe oldRecipe = session.get(Recipe.class, recipe.getRecipeId());
 			if (oldRecipe != null) {
@@ -105,7 +100,7 @@ public class RecipeDAOHibernate implements IRecipeDAO {
 			}
 			throw new DAOException("Database error", ex);
 		} finally {
-			closeSession(session);
+			closeSession();
 		}
 		return isUpdated;
 	}
@@ -113,11 +108,10 @@ public class RecipeDAOHibernate implements IRecipeDAO {
 	@Override
 	public boolean deleteById(int id) throws DAOException {
 		boolean isDeleted = false;
-		Session session = null;
 		Transaction tx = null;
 
 		try {
-			session = HibernateUtil.openSession();
+			Session session = getSession();
 			tx = session.beginTransaction();
 			Recipe recipe = session.get(Recipe.class, id);
 			if (recipe != null) {
@@ -131,15 +125,9 @@ public class RecipeDAOHibernate implements IRecipeDAO {
 			}
 			throw new DAOException("Database error", ex);
 		} finally {
-			closeSession(session);
+			closeSession();
 		}
 		return isDeleted;
-	}
-
-	private void closeSession(Session session) {
-		if (session != null) {
-			session.close();
-		}
 	}
 
 	private void updateRecipe(Recipe oldRecipe, Recipe newRecipe) {

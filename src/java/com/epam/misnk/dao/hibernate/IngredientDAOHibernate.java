@@ -5,24 +5,22 @@ import java.util.List;
 
 import com.epam.minsk.bean.Ingredient;
 import com.epam.minsk.exception.DAOException;
-import com.epam.minsk.utils.HibernateUtil;
-import com.epam.misnk.dao.IIngredientDAO;
+import com.epam.misnk.dao.AbstractDAO;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-public class IngredientDAOHibernate implements IIngredientDAO {
+public class IngredientDAOHibernate extends AbstractDAO<Ingredient> {
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Ingredient> findAll() throws DAOException {
 		List<Ingredient> ingredients = new ArrayList<Ingredient>();
-		Session session = null;
 
 		try {
-			session = HibernateUtil.openSession();
+			Session session = getSession();
 			Criteria cr = session.createCriteria(Ingredient.class);
 			if (cr.list() != null) {
 				ingredients.addAll(cr.list());
@@ -30,7 +28,7 @@ public class IngredientDAOHibernate implements IIngredientDAO {
 		} catch (HibernateException ex) {
 			throw new DAOException("Database error", ex);
 		} finally {
-			closeSession(session);
+			closeSession();
 		}
 		return ingredients;
 	}
@@ -38,15 +36,14 @@ public class IngredientDAOHibernate implements IIngredientDAO {
 	@Override
 	public Ingredient findById(int id) throws DAOException {
 		Ingredient ing;
-		Session session = null;
 
 		try {
-			session = HibernateUtil.openSession();
+			Session session = getSession();
 			ing = session.get(Ingredient.class, id);
 		} catch (HibernateException ex) {
 			throw new DAOException("Database error", ex);
 		} finally {
-			closeSession(session);
+			closeSession();
 		}
 		return ing;
 	}
@@ -54,7 +51,6 @@ public class IngredientDAOHibernate implements IIngredientDAO {
 	@Override
 	public boolean create(Ingredient ing) throws DAOException {
 		boolean isCreated = false;
-		Session session = null;
 		Transaction tx = null;
 		
 		if (ing == null) {
@@ -62,7 +58,7 @@ public class IngredientDAOHibernate implements IIngredientDAO {
 		}
 
 		try {
-			session = HibernateUtil.openSession();
+			Session session = getSession();
 			tx = session.beginTransaction();
 			session.save(ing);
 			tx.commit();
@@ -73,7 +69,7 @@ public class IngredientDAOHibernate implements IIngredientDAO {
 			}
 			throw new DAOException("Database error", ex);
 		} finally {
-			closeSession(session);
+			closeSession();
 		}
 		return isCreated;
 	}
@@ -81,7 +77,6 @@ public class IngredientDAOHibernate implements IIngredientDAO {
 	@Override
 	public boolean update(Ingredient ing) throws DAOException {
 		boolean isUpdated = false;
-		Session session = null;
 		Transaction tx = null;
 		
 		if (ing == null) {
@@ -89,7 +84,7 @@ public class IngredientDAOHibernate implements IIngredientDAO {
 		}
 
 		try {
-			session = HibernateUtil.openSession();
+			Session session = getSession();
 			tx = session.beginTransaction();
 			Ingredient ingredient = session.get(Ingredient.class, ing.getIngredientId());
 			if (ingredient != null) {
@@ -104,7 +99,7 @@ public class IngredientDAOHibernate implements IIngredientDAO {
 			}
 			throw new DAOException("Database error", ex);
 		} finally {
-			closeSession(session);
+			closeSession();
 		}
 		return isUpdated;
 	}
@@ -112,11 +107,10 @@ public class IngredientDAOHibernate implements IIngredientDAO {
 	@Override
 	public boolean deleteById(int id) throws DAOException {
 		boolean isDeleted = false;
-		Session session = null;
 		Transaction tx = null;
 
 		try {
-			session = HibernateUtil.openSession();
+			Session session = getSession();
 			tx = session.beginTransaction();
 			Ingredient ing = session.get(Ingredient.class, id);
 			session.delete(ing);
@@ -128,15 +122,9 @@ public class IngredientDAOHibernate implements IIngredientDAO {
 			}
 			throw new DAOException("Database error", ex);
 		} finally {
-			closeSession(session);
+			closeSession();
 		}
 		return isDeleted;
-	}
-
-	private void closeSession(Session session) {
-		if (session != null) {
-			session.close();
-		}
 	}
 
 	private void updateIngredient(Ingredient oldIng, Ingredient newIng) {
