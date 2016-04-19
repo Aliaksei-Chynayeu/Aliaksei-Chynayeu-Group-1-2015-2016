@@ -2,7 +2,6 @@ package com.epam.misnk.dao;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.epam.minsk.exception.DAOException;
 
 public abstract class AbstractDAO<T> {
-	private static final Logger LOG = Logger.getLogger(AbstractDAO.class);
 	@Autowired
 	private SessionFactory sessionFactory;
 	private volatile Session session;
@@ -25,7 +23,7 @@ public abstract class AbstractDAO<T> {
 		try {
 			session = sessionFactory.openSession();
 		} catch (HibernateException ex) {
-			LOG.error("Error. Unable to initialize session!", ex);
+			ex.printStackTrace();
 		}
 		return session;
 	}

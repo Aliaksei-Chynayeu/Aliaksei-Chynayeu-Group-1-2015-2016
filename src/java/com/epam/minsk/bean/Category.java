@@ -6,3 +6,4 @@ public enum Category {
 	DINNER, LUNCH, BREAKFAST, DRINK, SWEETS, BAKE
 
 }
+
